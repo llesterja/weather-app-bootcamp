@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import logo from "./logo.png";
+import logo from "./photos-sky-during-different-weather-260nw-1899360634.jpg";
 import "./App.css";
 import axios from "axios";
 
@@ -16,6 +16,14 @@ function App (){
       console.log(response)
       const {lat,lon}=response.data[0];
       console.log(lat,lon)
+      await axios.get(
+        `https://api.openweathermap.org/data/2.5/weather?lat=${lat}&lon=${lon}&appid=fe3a5aa180a67609e1cc3253d5b7f64c`
+      )
+      .then((response)=>{
+        const {data:weatherData} = response;
+        console.log('weatherdata',weatherData)
+        setCurrWeather(weatherData)
+      })
     }catch(err){
       console.log(err);
     };
@@ -32,6 +40,15 @@ function App (){
   //   // Do something with product1 and user1
   // });
 
+  const handleChange = (e) => {
+    const {name, value} = e.target;
+    setCityInput(value);
+  }
+  const handleSubmit = (event) => {
+    event.preventDefault();
+    getCurrentWeather(cityInput);
+    setCityInput("");
+  };
 
   useEffect(()=>{
     getCurrentWeather('Jurong East');
@@ -41,11 +58,17 @@ function App (){
       <div className="App">
         <header className="App-header">
           <img src={logo} className="App-logo" alt="logo" />
+
+          <h1>Type in a city to get their weather now!</h1>
           <input
             type="text"
             value={cityInput}
+            onChange={handleChange}
           />
-          <h3>{currWeather}</h3>
+          <input type="submit" value="Get Weather!" onSubmit={handleSubmit} />
+          
+          <h3>{currWeather?currWeather.name:""}</h3>
+          <h3>{currWeather?currWeather.weather[0].main:""}</h3>
         </header>
       </div>
     );
