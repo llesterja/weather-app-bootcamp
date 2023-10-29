@@ -41,8 +41,9 @@ function App (){
   // });
 
   const handleChange = (e) => {
-    const {name, value} = e.target;
+    const {value} = e.target;
     setCityInput(value);
+    console.log(cityInput)
   }
   const handleSubmit = (event) => {
     event.preventDefault();
@@ -63,9 +64,9 @@ function App (){
           <input
             type="text"
             value={cityInput}
-            onChange={handleChange}
+            onChange={(e)=>handleChange(e)}
           />
-          <input type="submit" value="Get Weather!" onSubmit={handleSubmit} />
+          <input type="submit" value="Get Weather!" onClick={handleSubmit} />
           
           <h3>{currWeather?currWeather.name:""}</h3>
           <h3>{currWeather?currWeather.weather[0].main:""}</h3>
